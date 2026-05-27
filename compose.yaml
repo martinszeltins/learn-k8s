@@ -26,7 +26,10 @@ services:
       - "7659:3000"
     volumes:
       - ./app/client:/app
-    networks:
-      - app-network
     depends_on:
       - learn-k8s-server
+    networks:
+      - app-network
+
+networks:
+  app-network:
