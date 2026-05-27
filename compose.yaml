@@ -1,0 +1,32 @@
+services:
+  # Laravel backend app (server)
+  learn-k8s-server:
+    build:
+      context: .
+      dockerfile: docker/images/server/Dockerfile
+    container_name: learn-k8s-server
+    user: 1000:1000 # very important to use non-root user!
+    restart: unless-stopped
+    ports:
+      - "7658:80"
+    volumes:
+      - ./app/server:/app
+    networks:
+      - app-network
+
+  # Nuxt frontend app (client)
+  learn-k8s-client:
+    build:
+      context: .
+      dockerfile: docker/images/client/Dockerfile
+    container_name: learn-k8s-client
+    user: 1000:1000 # very important to use non-root user!
+    restart: unless-stopped
+    ports:
+      - "7659:3000"
+    volumes:
+      - ./app/client:/app
+    networks:
+      - app-network
+    depends_on:
+      - learn-k8s-server
