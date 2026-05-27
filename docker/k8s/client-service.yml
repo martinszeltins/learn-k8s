@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-k8s-client
+spec:
+  selector:
+    app: learn-k8s-client
+  ports:
+    - port: 80
+      targetPort: 3000

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-k8s-server
+spec:
+  selector:
+    app: learn-k8s-server
+  ports:
+    - port: 80
+      targetPort: 80

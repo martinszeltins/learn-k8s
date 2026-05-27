@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learn-k8s-client
+  labels:
+    app: learn-k8s-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learn-k8s-client
+  template:
+    metadata:
+      labels:
+        app: learn-k8s-client
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: client
+          image: learn-k8s-client:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NUXT_PUBLIC_BACKEND_API_URL
+              value: "http://learn-k8s-server/api"
+            - name: NUXT_PUBLIC_BACKEND_PUBLIC_URL
+              value: "https://api.learnk8s.com"

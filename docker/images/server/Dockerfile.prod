@@ -22,12 +22,24 @@ COPY docker/images/server/nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/cache/nginx /var/log/nginx /tmp \
     && chmod -R 777 /var/cache/nginx /var/log/nginx /var/run /tmp
 
-# Copy entrypoint
-COPY docker/images/server/entrypoint.sh /entrypoint.sh
+# Copy production entrypoint (no DB setup needed)
+COPY docker/images/server/entrypoint.prod.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 WORKDIR /app
 
+# Copy application source
+COPY app/server /app
+
+# Install PHP dependencies (production only)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+# Ensure storage directories exist with correct permissions
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+    && chmod -R 777 storage bootstrap/cache
+
 EXPOSE 80
+
+USER 1000:1000
 
 ENTRYPOINT ["/entrypoint.sh"]

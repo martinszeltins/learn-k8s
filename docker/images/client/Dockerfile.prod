@@ -1,1 +1,28 @@
+# Stage 1: Build
+FROM node:24-slim AS build
+
+RUN npm install -g pnpm@9
+
+WORKDIR /app
+
+COPY app/client/package.json app/client/pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+COPY app/client .
+
+RUN pnpm build
+
+# Stage 2: Run
+FROM node:24-slim
+
+WORKDIR /app
+
+COPY --from=build /app/.output .output
+
+EXPOSE 3000
+
+USER 1000:1000
+
+CMD ["node", ".output/server/index.mjs"]
 

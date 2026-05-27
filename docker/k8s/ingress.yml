@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: learn-k8s-ingress
+spec:
+  rules:
+    - host: learnk8s.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: learn-k8s-client
+                port:
+                  number: 80
+    - host: api.learnk8s.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: learn-k8s-server
+                port:
+                  number: 80
