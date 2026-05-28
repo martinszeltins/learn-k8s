@@ -20,6 +20,7 @@ spec:
       containers:
         - name: server
           image: learn-k8s-server:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 80
           env:
