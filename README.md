@@ -18,7 +18,7 @@ bin/build-images
 
 Edit `docker/k8s/client-deployment.yml`:
 - Set `NUXT_PUBLIC_BACKEND_API_URL` (internal: `http://learn-k8s-server/api`)
-- Set `NUXT_PUBLIC_BACKEND_PUBLIC_URL` (public: `https://api.learnk8s.com`)
+- Set `NUXT_PUBLIC_BACKEND_PUBLIC_URL` (public: `http://api.learnk8s.com`)
 
 ### 3. Deploy
 

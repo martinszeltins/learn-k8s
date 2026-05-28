@@ -27,4 +27,4 @@ spec:
             - name: NUXT_PUBLIC_BACKEND_API_URL
               value: "http://learn-k8s-server/api"
             - name: NUXT_PUBLIC_BACKEND_PUBLIC_URL
-              value: "https://api.learnk8s.com"
+              value: "http://api.learnk8s.com"
