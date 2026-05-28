@@ -7,6 +7,6 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "Applying Kubernetes manifests..."
-kubectl apply -f docker/k8s/
+sudo k3s kubectl apply -f docker/k8s/
 
 echo "Done! Check status with: kubectl get pods"
