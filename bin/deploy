@@ -1,12 +1,34 @@
 #!/bin/sh
 set -e
 
-# Placeholder: deploy to K3s cluster
-# Prerequisites: kubectl configured and pointing to your K3s cluster
+echo "Building server image..."
+docker build -t learn-k8s-server:latest -f docker/images/server/Dockerfile.prod .
 
-cd "$(dirname "$0")/.."
+echo "Building client image..."
+docker build -t learn-k8s-client:latest -f docker/images/client/Dockerfile.prod .
+
+echo "Done! Images built:"
+docker images | grep learn-k8s
+
+
+echo "Saving Docker images..."
+docker save learn-k8s-server:latest -o /tmp/learn-k8s-server.tar
+docker save learn-k8s-client:latest -o /tmp/learn-k8s-client.tar
+
+echo "Importing images into K3s containerd..."
+sudo k3s ctr images import /tmp/learn-k8s-server.tar
+sudo k3s ctr images import /tmp/learn-k8s-client.tar
 
 echo "Applying Kubernetes manifests..."
 sudo k3s kubectl apply -f docker/k8s/
 
-echo "Done! Check status with: kubectl get pods"
+echo "Restarting deployments so they use the newly imported images..."
+sudo k3s kubectl rollout restart deployment/learn-k8s-server
+sudo k3s kubectl rollout restart deployment/learn-k8s-client
+
+echo "Waiting for rollout..."
+sudo k3s kubectl rollout status deployment/learn-k8s-server
+sudo k3s kubectl rollout status deployment/learn-k8s-client
+
+echo "Done."
+sudo k3s kubectl get pods
