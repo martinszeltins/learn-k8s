@@ -1,35 +1,28 @@
-# Learn Kubernetes
+# Setup
 
-app/client - Nuxt app
-app/server - Laravel app
+## Deployment
 
-Docker setup to use non-root user (1000:1000) to avoid permission issues when running containers in Kubernetes with non-root user later!
+### Install Kubernetes
 
-
-## Production Deployment
-
-### 1. Build images
-
-```sh
-bin/build-images
+```bash
+sudo apt install -y curl ca-certificates git jq
+curl -sfL https://get.k3s.io | sh -
+sudo ufw allow 80/tcp && sudo ufw allow 443/tcp
+sudo k3s kubectl get nodes && sudo k3s kubectl get pods -A
 ```
 
-### 2. Configure
+### Deploy app
 
-Edit `docker/k8s/client-deployment.yml`:
-- Set `NUXT_PUBLIC_BACKEND_API_URL` (internal: `http://learn-k8s-server/api`)
-- Set `NUXT_PUBLIC_BACKEND_PUBLIC_URL` (public: `http://api.learnk8s.com`)
-
-### 3. Deploy
-
-```sh
+```bash
 bin/deploy
 ```
 
-### 4. DNS
+### Add hosts
 
-Point in Cloudflare:
-- `learnk8s.com` → your server IP
-- `api.learnk8s.com` → your server IP
+```bash
+echo '127.0.0.1 learnk8s.com api.learnk8s.com' | sudo tee -a /etc/hosts
+```
 
-SSL mode: Flexible (Cloudflare terminates TLS).
+### Open the app in browser
+
+http://learnk8s.com
